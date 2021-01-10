@@ -59,12 +59,13 @@ def get_books(search_term):
     DATA = R.json()
 
     output = []
-    for item in DATA["items"]:
-        result = {}
-        result['title'] = item["volumeInfo"]["title"]
-        result['authors'] = item["volumeInfo"]["authors"] if "authors" in item["volumeInfo"] else []
-        result['thumbnail_uri'] = item["volumeInfo"]["imageLinks"]["thumbnail"] if "imageLinks" in item["volumeInfo"] else ""
-        output.append(result)
+    if 'items' in DATA:
+        for item in DATA["items"]:
+            result = {}
+            result['title'] = item["volumeInfo"]["title"]
+            result['authors'] = item["volumeInfo"]["authors"] if "authors" in item["volumeInfo"] else []
+            result['thumbnail_uri'] = item["volumeInfo"]["imageLinks"]["thumbnail"] if "imageLinks" in item["volumeInfo"] else ""
+            output.append(result)
     return output
 
 
