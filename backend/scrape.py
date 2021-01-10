@@ -22,7 +22,7 @@ def wiki2dict(url: str) -> Dict[str, str]:
 
     res['title'] = bs.find('h1', {'id': 'firstHeading'}).get_text()
     res['link'] = url
-    res['text'] = firstpar.get_text()
+    res['text'] = re.sub(r'\[\d+\]', '', firstpar.get_text()).strip()
 
     # First search in firstpar for related:
     res['related'] = external_link_texts(firstpar.find_all('a', href=True))
@@ -35,14 +35,9 @@ def wiki2dict(url: str) -> Dict[str, str]:
 
 def get_wiki_url(search_term: str) -> Optional[str]:
     S = requests.Session()
-
-    URL = 'https://en.wikipedia.org/w/api.php?format=json&action=query&prop=pageimages|info|extracts&exintro&explaintext&redirects=1&pithumbsize=1000&inprop=url&titles=' + search_term
-
-    R = S.get(url=URL)
-    DATA = R.json()
-    PAGES = DATA['query']['pages']
-    if '-1' not in PAGES:
-        return PAGES[list(PAGES.keys())[0]]['fullurl']
+    URL = f'https://en.wikipedia.org/w/api.php?action=opensearch&search={search_term}&limit=1&namespace=0&format=json'
+    data = S.get(url=URL).json()
+    return data[-1][0] if data[-1] else ''
 
 
 def get_utube_links(search_term: str, key) -> str:
@@ -94,8 +89,8 @@ def get_ctree(search_term: str, ctrees: dict) -> Tuple[str, dict]:
 
 
 def get_response_dict(search_term: str, ctrees: dict, ytb_key: str, gthumb_key: str) -> dict:
-    wiki = get_wiki_url(search_term)
-    d = wiki2dict(wiki)
+    wikiurl = get_wiki_url(search_term)
+    d = wiki2dict(wikiurl) if wikiurl else {'title': search_term, 'link': '', 'text': '', 'related': []}
     d['books'] = get_books(search_term)
     d['ytb_links'] = get_utube_links(search_term, ytb_key)
     d['imgurl'] = get_thumbnail_url(search_term, gthumb_key)
