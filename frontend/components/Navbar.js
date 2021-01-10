@@ -8,35 +8,44 @@ import cookie from "react-cookies";
 
 export default function Navbar(props) {
   const path = ["Machine Learning", "Artificial Intelligence", "Python"];
-  const [modal, setModal] = useState(false);
+  const [modal, setModal] = useState(0);
   const [search, setSearch] = useState("");
   const router = useRouter();
 
   const handleKeyUp = (event) => {
     if (event.key === "Enter") {
-      console.log(search);
       setModal(false);
       router.push(`/search/${search}`);
     }
   };
 
-  // var currPath;
-  // useEffect(() => {
-  //   currPath = cookie.load("path");
-  //   console.log("path: ", currPath);
-  //   if (currPath) {
-  //     currPath.push(router.query.query);
-  //     cookie.save("path", currPath);
-  //   } else {
-  //     cookie.save("path", [router.query.query]);
-  //   }
-  //   console.log("path: ", currPath);
-  // });
+  let currPath = cookie.load("path");
+  if (!currPath) {
+    currPath = [];
+  }
 
-  // useEffect(() => {
-  //   const deleteCookie = () => cookie.remove("path");
-  //   return () => deleteCookie();
-  // }, []);
+  const history = (key) => {
+    console.log("here");
+    for (let i = 0; i < currPath.length; i++) {
+      console.log(i);
+      if (currPath[i] === key) {
+        currPath = currPath.slice(0, i);
+        cookie.save("path", currPath);
+        console.log(currPath);
+        return;
+      }
+    }
+  };
+
+  useEffect(() => {
+    // returned function will be called on component unmount
+    const removeCookie = () => {
+      cookie.remove("path");
+    };
+    return () => {
+      removeCookie();
+    };
+  }, []);
 
   return (
     <>
@@ -51,11 +60,15 @@ export default function Navbar(props) {
             </span>{" "}
             /
           </p>
-          {props.path.map((p) => {
+          {currPath.map((p) => {
             return (
               <p key={p}>
                 <span className={styles.pathName}>
-                  <NextLink href="/network/[query]" as={`/network/${p}`}>
+                  <NextLink
+                    href="/search/[query]"
+                    as={`/search/${p}`}
+                    onClick={() => history(p)}
+                  >
                     {p}
                   </NextLink>
                 </span>
@@ -63,9 +76,16 @@ export default function Navbar(props) {
               </p>
             );
           })}
+          {currPath.length !== 0 && (
+            <p>
+              <span className={styles.pathName}>
+                <NextLink href="#">{router.query.query + " /"}</NextLink>
+              </span>
+            </p>
+          )}
         </div>
         <span className={styles.right}>
-          <span onClick={() => setModal(true)} className={styles.search}>
+          <span onClick={() => setModal(1)} className={styles.search}>
             <svg
               className={styles.icon}
               height="18"
@@ -84,60 +104,91 @@ export default function Navbar(props) {
             </svg>
             Search
           </span>
-          <span
-            onClick={() => router.push("/account")}
-            className={styles.search}
-          >
+          <span onClick={() => setModal(2)} className={styles.search}>
             <svg
               className={styles.icon}
               height="18"
               width="18"
               xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
             >
               <path
-                fillRule="evenodd"
-                d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                clipRule="evenodd"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"
               />
             </svg>
-            Account
+            Save
+          </span>
+          <span onClick={() => setModal(3)} className={styles.search}>
+            <svg
+              className={styles.icon}
+              height="18"
+              width="18"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"
+              />
+            </svg>
+            Saved
           </span>
         </span>
       </nav>
       <PureModal
-        className={styles.modal}
-        isOpen={modal}
+        isOpen={modal === 1 || modal === 2 || modal === 3}
         replace
         onClose={() => {
-          setModal(false);
+          setModal(0);
           return true;
         }}
       >
-        <svg
-          className={styles.searchbarIcon}
-          height="21"
-          width="21"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="grey"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-          />
-        </svg>
-        <input
-          onChange={(e) => setSearch(e.target.value)}
-          onKeyUp={handleKeyUp}
-          className={styles.searchbar}
-          type="text"
-          placeholder="Search..."
-        />
+        {modal === 1 && (
+          <div className={styles.modal}>
+            <svg
+              className={styles.searchbarIcon}
+              height="21"
+              width="21"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="grey"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
+            <input
+              onChange={(e) => setSearch(e.target.value)}
+              onKeyUp={handleKeyUp}
+              className={styles.searchbar}
+              type="text"
+              placeholder="Search..."
+            />
+          </div>
+        )}
+        {modal === 2 && (
+          <>
+            <div>asdasd</div>
+          </>
+        )}
+        {modal === 3 && (
+          <>
+            <div>asdasd</div>
+          </>
+        )}
       </PureModal>
     </>
   );

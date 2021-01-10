@@ -41,10 +41,12 @@ const Panel = (props) => {
             <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />
           </svg>
         </span>
-        {/* {props.data.title} */}
+        {props.data.title}
       </h2>
 
-      <div className={styles.info}>{/* <p>💁 {props.data.text}</p> */}</div>
+      <div className={styles.info}>
+        <p>💁 {props.data.text}</p>
+      </div>
 
       <div className={styles.info}>
         <p className={styles.head}>📍The Path to Machine Learning:</p>
@@ -57,7 +59,7 @@ const Panel = (props) => {
 
       <div className={styles.info}>
         <p className={styles.head}>🎥 Videos to get Started:</p>
-        {/* {props.data.ytb_links.map((y) => {
+        {props.data.ytb_links.map((y) => {
           let code = y.substring(32, y.length);
           let url = "https://www.youtube.com/embed/" + code;
           // console.log(url);
@@ -70,14 +72,14 @@ const Panel = (props) => {
               ></iframe>
             </div>
           );
-        })} */}
+        })}
       </div>
 
       <div className={styles.info}>
         <p className={styles.head}>📚 Books on the Topic:</p>
-        {/* {props.data.books.map((b) => {
+        {props.data.books.map((b) => {
           return <div className={styles.book}>{b.title}</div>;
-        })} */}
+        })}
       </div>
     </div>
   );

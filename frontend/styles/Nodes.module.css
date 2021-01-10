@@ -5,4 +5,5 @@
   height: calc(100% - 50px);
   position: absolute;
   background-color: #ededed;
+  display: flex;
 }

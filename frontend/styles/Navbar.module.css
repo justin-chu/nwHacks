@@ -19,6 +19,22 @@
   float: left;
   display: flex;
   padding: 4px 20px;
+  max-width: calc(100% - 240px);
+  white-space: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+}
+
+.path::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+  background: transparent; /* Chrome/Safari/Webkit */
+}
+
+.disableScrollbars {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
 }
 
 .pathName:hover {
@@ -52,7 +68,7 @@
 
 .modal {
   position: absolute;
-  top: 30%;
+  top: -200px;
   left: 50%;
   margin-left: -320px;
 }
