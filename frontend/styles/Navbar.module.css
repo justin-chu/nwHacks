@@ -1,0 +1,72 @@
+.nav {
+  background-color: white;
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  z-index: 50;
+  display: flex;
+  /* padding: 1.2rem; */
+  font-size: 0.9rem;
+  font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
+    Bitstream Vera Sans Mono, Courier New, monospace;
+  border-bottom-width: 1px;
+  border-bottom-color: #ededed;
+  border-bottom-style: solid;
+}
+
+.path {
+  float: left;
+  display: flex;
+  padding: 4px 20px;
+}
+
+.pathName:hover {
+  border-bottom: 2px solid black;
+  font-weight: 600;
+}
+
+.slash {
+  margin: 0 8px;
+}
+
+.search {
+  margin: auto 0;
+  padding: 4px 20px;
+  display: flex;
+  justify-content: center;
+  margin-left: auto;
+  cursor: pointer;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+.icon {
+  margin-right: 4px;
+}
+
+.modal {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  margin-left: -320px;
+}
+
+.searchbar {
+  padding: 10px 20px;
+  padding-left: 54px;
+  padding-top: 11px;
+  width: 600px;
+  height: 50px;
+  border-radius: 10px;
+  outline: none;
+  border: none;
+  box-shadow: 0 0 15px 10px rgba(0, 0, 0, 0.1);
+  font-size: 20px;
+}
+
+.searchbarIcon {
+  position: absolute;
+  left: 20px;
+  top: 14px;
+}
