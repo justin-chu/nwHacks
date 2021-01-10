@@ -3,27 +3,9 @@ import React, { useState } from "react";
 import Shimmer from "react-shimmer-effect";
 
 const ShimmerPanel = (props) => {
-  const [bookmarked, setBookmarked] = useState(false);
-
   return (
     <div className={styles.panel}>
-      <h2 className={styles.title}>
-        {/* <span onClick={() => setBookmarked(!bookmarked)}>
-          <svg
-            height="25"
-            width="25"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill={bookmarked ? "black" : "white"}
-            stroke={bookmarked ? "" : "black"}
-            strokeWidth="1.5"
-            style={{ margin: "2.1 4 0 0", cursor: "pointer" }}
-          >
-            <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />
-          </svg>
-        </span> */}
-        {props.title}
-      </h2>
+      <h2 className={styles.title}>{props.title}</h2>
 
       <div className={styles.info}>
         <p className={styles.subheaderContainer}>

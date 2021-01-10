@@ -5,10 +5,25 @@ import Node from "./Node";
 import ProgressBar from "@ramonak/react-progress-bar";
 
 const Nodes = (props) => {
+  if (props.loading) {
+    return (
+      <div className={styles.graph}>
+        <div style={{ margin: "auto", width: "50%" }}>
+          <ProgressBar
+            bgcolor="#0076ffe6"
+            baseBgColor="darkgrey"
+            labelSize="12px"
+            completed={props.percent}
+          />
+        </div>
+      </div>
+    );
+  }
+
   const info = { nodes: [], links: [] };
 
-  props.data?.related.slice(0, 12).map((n) => {
-    info.nodes.push({ id: n.title, key: n.title, imgurl: n.imgurl });
+  props.data?.related.slice(0, 12).map((n, index) => {
+    info.nodes.push({ id: n.title, key: index, imgurl: n.imgurl });
   });
 
   return (

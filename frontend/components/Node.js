@@ -30,7 +30,6 @@ const Node = ({ node }) => {
   };
 
   const url = node.key;
-  // console.log(url);
 
   return (
     <svg
@@ -54,14 +53,14 @@ const Node = ({ node }) => {
       y="-150"
       x="-150"
     >
-      <img src={url} height="100" width="100" />
+      {console.log("this:", node.imgurl)}
       <defs>
         <pattern
-          id="attachedImage"
+          id={`attachedImage-${node.key}`}
           height="100%"
           width="100%"
           patternContentUnits="objectBoundingBox"
-          //viewBox="0 0 100% 100%"
+          viewBox="0 0 100% 100%"
         >
           <image
             xlinkHref={node.imgurl}
@@ -78,7 +77,12 @@ const Node = ({ node }) => {
         fill="none"
         fillRule="evenodd"
       >
-        <circle cx="50%" cy="50%" r="35%" fill="url(#attachedImage)" />
+        <circle
+          cx="50%"
+          cy="50%"
+          r="35%"
+          fill={`url(#attachedImage-${node.key})`}
+        />
         <circle cx="50%" cy="50%" r="35%" fill="rgba(0,0,0,0.6)" />
         <text
           x="50%"

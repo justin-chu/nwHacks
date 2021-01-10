@@ -5,7 +5,6 @@ export const search_backend = async (search_term) => {
     ""
   );
   search_term = search_term.toLowerCase();
-  console.log(search_term);
   const url = "https://nwhacks-301300.uc.r.appspot.com/search?q=" + search_term;
 
   const response = await fetch(url);

@@ -57,11 +57,9 @@ export default function Navbar() {
 
   const history = (key) => {
     for (let i = 0; i < currPath.length; i++) {
-      console.log(i);
       if (currPath[i] === key) {
         currPath = currPath.slice(0, i);
         cookie.save("path", currPath);
-        console.log(currPath);
         return;
       }
     }

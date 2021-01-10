@@ -9,7 +9,7 @@
   left: 0;
   right: 0;
   transform: scale(1);
-  transition: transform 0.5s;
+  transition: 0.5s;
 }
 
 .circle:hover {
