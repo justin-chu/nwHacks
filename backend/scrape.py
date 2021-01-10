@@ -1,11 +1,12 @@
 import re
 import requests
 import bs4
+import json
 
 from bs4 import BeautifulSoup
 from urllib.request import urlopen
 from urllib.parse import urljoin
-from typing import Dict, List
+from typing import Dict, List, Tuple
 
 
 def external_link_texts(matches: bs4.element.ResultSet) -> List[str]:
@@ -26,8 +27,9 @@ def wiki2dict(url: str) -> Dict[str, str]:
     # First search in firstpar for related:
     res['related'] = external_link_texts(firstpar.find_all('a', href=True))
     # Search in article's first table for related:
-    for div in table.find_all('div', {'class': 'NavHead'}):
-        res['related'] += external_link_texts(div.find_all('a', href=True))
+    if table is not None:
+        for div in table.find_all('div', {'class': 'NavHead'}):
+            res['related'] += external_link_texts(div.find_all('a', href=True))
     return res
 
 
@@ -43,24 +45,20 @@ def get_wiki_url(search_term: str) -> str:
         return PAGES[list(PAGES.keys())[0]]['fullurl']
 
 
-def get_utube_links(search_term: str) -> str:
+def get_utube_links(search_term: str, key) -> str:
     S = requests.Session()
 
-    URL = '%s%s%s' % ('https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=',
-                      search_term, '&key=AIzaSyCA1zvAvILXKNkTpD_4SmkpVDouZ5wFwyw')
+    URL = f'https://youtube.googleapis.com/youtube/v3/search?part=snippet&q={search_term}&key={key}'
 
     R = S.get(url=URL)
     DATA = R.json()
-    # print(DATA)
-
-    return ['%s%s' % ('https://www.youtube.com/watch?v=', item["id"]["videoId"]) for item in DATA["items"]]
+    return [f'https://www.youtube.com/watch?v={item["id"]["videoId"]}' for item in DATA["items"]]
 
 
 def get_books(search_term):
     S = requests.Session()
 
-    URL = '%s%s' % (
-        'https://www.googleapis.com/books/v1/volumes?q=', search_term)
+    URL = f'https://www.googleapis.com/books/v1/volumes?q={search_term}'
 
     R = S.get(url=URL)
     DATA = R.json()
@@ -75,9 +73,8 @@ def get_books(search_term):
     return output
 
 
-def get_thumbnail_url(search_term):
+def get_thumbnail_url(search_term, key):
     start_idx = '1'
-    key = 'AIzaSyCA1zvAvILXKNkTpD_4SmkpVDouZ5wFwyw'
     cx = 'ae77ccce312b12d27'
     search_url = f'https://www.googleapis.com/customsearch/v1?q={search_term}&start={start_idx}&key={key}&cx={cx}&searchType=image'
     r = requests.get(search_url)
@@ -87,8 +84,35 @@ def get_thumbnail_url(search_term):
         return result['items'][0]['link']
 
 
+def get_ctree(search_term: str, ctrees: dict) -> Tuple[str, dict]:
+    regexp = re.compile(search_term, flags=re.IGNORECASE)
+    cmatch = next((k for k in ctrees if regexp.search(k)), None)
+    if cmatch is None:
+        return '', {}
+    else:
+        return cmatch, ctrees[cmatch]
+
+
+def get_response_dict(search_term: str, ctrees: dict, ytb_key: str, gthumb_key: str) -> dict:
+    wiki = get_wiki_url(search_term)
+    d = wiki2dict(wiki)
+    d['books'] = get_books(search_term)
+    d['ytb_links'] = get_utube_links(search_term, ytb_key)
+    d['imgurl'] = get_thumbnail_url(search_term, gthumb_key)
+    d['steps'] = get_ctree(search_term, ctrees)
+
+    temp = []
+    while d['related']:
+        rel = d['related'].pop()
+        temp.append({
+            'title': rel,
+            'imgurl': get_thumbnail_url(rel, gthumb_key)})
+    d['related'] = temp
+    return d
+
+
 def main():
-    url = get_wiki_url('Machine Learnin')
+    url = get_wiki_url('Machine Learning')
     print(f'URL IS: {url}')
     res = wiki2dict(url)
     print(res)

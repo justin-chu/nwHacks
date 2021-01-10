@@ -4,6 +4,8 @@ from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 from urllib.request import urlopen
 
+from typing import Tuple
+
 
 def print_ctree(ctree: dict, depth: int=0, seen=None) -> None:
     for course in ctree:
