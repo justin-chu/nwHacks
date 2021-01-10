@@ -6,8 +6,9 @@ import ProgressBar from "@ramonak/react-progress-bar";
 
 const Nodes = (props) => {
   const info = { nodes: [], links: [] };
-  props.data.related.slice(0, 12).map((n) => {
-    info.nodes.push({ id: n.title, imgurl: n.imgurl });
+
+  props.data?.related.slice(0, 12).map((n) => {
+    info.nodes.push({ id: n.title, key: n.title, imgurl: n.imgurl });
   });
 
   return (

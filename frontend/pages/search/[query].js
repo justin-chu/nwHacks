@@ -2,7 +2,6 @@ import Head from "next/head";
 import styles from "../../styles/Search.module.css";
 import Navbar from "../../components/Navbar";
 import Nodes from "../../components/Nodes";
-// import Panel from "../../components/Panel";
 import NewPanel from "../../components/NewPanel";
 import { useState, useEffect } from "react";
 import PureModal from "react-pure-modal";
@@ -10,8 +9,10 @@ import "react-pure-modal/dist/react-pure-modal.min.css";
 import { useRouter } from "next/router";
 import NextLink from "next/link";
 import axios from "axios";
+import { search_backend } from "../../api/api.js";
+import useQuery from "../../utils/useQuery";
 
-const Search = () => {
+const Search = (props) => {
   const sample = {
     books: [
       {
@@ -205,19 +206,43 @@ const Search = () => {
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
-  const [percent, setPercent] = useState(30);
+  const [percent, setPercent] = useState(0);
   const [path, setPath] = useState([]);
   const [modal, setModal] = useState(false);
-  const [data, setData] = useState({});
+  const [data, setData] = useState(null);
+  const [q, setQ] = useState("");
 
-  // useEffect(async () => {
-  //   // const result = await axios(
-  //   //   'https://hn.algolia.com/api/v1/search?query=redux',
-  //   // );
+  // setQ(router.query.query)
 
-  //   // setData(result.data);
-  //   setData(sample);
-  // });
+  const query = useQuery();
+
+  useEffect(async () => {
+    if (!query) {
+      return;
+    }
+    // console.log(router.query);
+    // setQ(router.query.query);
+    // console.log(q);
+    // if (q === undefined) {
+    //   console.log("as", q);
+    //   setQ(router.query.search);
+    //   console.log("asd", q);
+    // }
+    console.log(query);
+    const query_backend = async () => {
+      // console.log("User query:", router.query.query);
+      // console.log(props);
+
+      const serverData = await search_backend(query.query);
+      console.log("Server data", serverData);
+      setData(serverData);
+      setPercent(100);
+      setLoading(false);
+    };
+    setLoading(true);
+    setPercent(30);
+    query_backend();
+  }, [query]);
 
   const handleChange = (p) => {
     path.push(p);
@@ -231,14 +256,17 @@ const Search = () => {
       </Head>
       <Navbar path={path} />
       <div className={styles.body}>
-        <Nodes
-          onChange={handleChange}
-          loading={loading}
-          percent={percent}
-          data={sample}
-        />
-        {/* <Panel data={sample} /> */}
-        <NewPanel loading={loading} data={sample} />
+        {data && (
+          <>
+            <Nodes
+              onChange={handleChange}
+              loading={loading}
+              percent={percent}
+              data={data}
+            />
+            <NewPanel loading={loading} data={data} />
+          </>
+        )}
       </div>
       <PureModal
         className={styles.modal}

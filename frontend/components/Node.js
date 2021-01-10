@@ -29,6 +29,9 @@ const Node = ({ node }) => {
     );
   };
 
+  const url = node.key;
+  // console.log(url);
+
   return (
     <svg
       onClick={() => {
@@ -39,7 +42,10 @@ const Node = ({ node }) => {
         } else {
           cookie.save("path", [router.query.query]);
         }
-        router.push(`/search/${node.id}`);
+        router.push({
+          pathname: `/search/${node.id}`,
+          query: { query: node.id },
+        });
       }}
       className={styles.circle}
       height="300"
@@ -48,7 +54,7 @@ const Node = ({ node }) => {
       y="-150"
       x="-150"
     >
-      <img src={node.imgurl} height="100" width="100" />
+      <img src={url} height="100" width="100" />
       <defs>
         <pattern
           id="attachedImage"
