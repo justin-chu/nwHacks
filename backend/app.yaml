@@ -1,1 +1,6 @@
 runtime: python37
+handlers:
+- url: '/search'
+  static_dir: '/'
+  http_headers:
+    Access-Control-Allow-Origin: '*'

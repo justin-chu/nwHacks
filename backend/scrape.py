@@ -47,7 +47,10 @@ def get_utube_links(search_term: str, key) -> str:
 
     R = S.get(url=URL)
     DATA = R.json()
-    return [f'https://www.youtube.com/watch?v={item["id"]["videoId"]}' for item in DATA["items"] if "videoId" in item["id"]]
+    if("items" in DATA):
+        return [f'https://www.youtube.com/watch?v={item["id"]["videoId"]}' for item in DATA["items"] if "videoId" in item["id"]]
+    else:
+        return []
 
 
 def get_books(search_term):
