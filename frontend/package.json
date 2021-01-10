@@ -19,6 +19,7 @@
     "react-graph-network": "^1.0.5",
     "react-pure-modal": "^2.0.14",
     "react-shimmer-effect": "^1.0.9",
+    "react-text-loop": "^2.3.0",
     "semantic-ui-react": "^2.0.1"
   }
 }

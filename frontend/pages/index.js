@@ -2,6 +2,7 @@ import { useState } from "react";
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import { useRouter } from "next/router";
+import TextLoop from "react-text-loop";
 
 export default function Home() {
   const [search, setSearch] = useState("");
@@ -26,7 +27,16 @@ export default function Home() {
         </h1>
 
         <p className={styles.description}>
-          Education Visualization. Try it out by searching a topic from school!
+          Pathfinder is an educational visualization tool. Try it out by
+          searching{" "}
+          <TextLoop>
+            <span>machine learning</span>
+            <span>linear algebra</span>
+            <span>hackathons</span>
+            <span>statistics</span>
+            <span>mechanics</span>
+          </TextLoop>
+          !
         </p>
 
         <div className={styles.search_box}>
@@ -41,7 +51,7 @@ export default function Home() {
       </main>
 
       <footer className={styles.footer}>
-        Developed by Justin Chu, Mark Chen, Sam Prokopchuk, Connor Ibbotson
+        Developed by Justin Chu, Mark Chen, Connor Ibbotson
       </footer>
     </div>
   );

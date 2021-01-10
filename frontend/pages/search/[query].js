@@ -29,7 +29,7 @@ const Search = (props) => {
       return;
     }
     const query_backend = async () => {
-      setPercent(0);
+      setPercent(30);
       const serverData = await search_backend(query.query);
       setData(serverData);
       setPercent(60);
