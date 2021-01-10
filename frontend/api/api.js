@@ -1,4 +1,4 @@
-export const search = async (search_term, abortController = new AbortController()) => {
+ const search = async (search_term) => {
     
     //remove symbols from search term
     search_term = search_term.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '');
