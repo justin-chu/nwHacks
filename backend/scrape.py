@@ -68,7 +68,7 @@ def get_books(search_term):
         result = {}
         result['title'] = item["volumeInfo"]["title"]
         result['authors'] = item["volumeInfo"]["authors"] if "authors" in item["volumeInfo"] else []
-        result['thumbnail_uri'] = item["volumeInfo"]["imageLinks"]["thumbnail"]
+        result['thumbnail_uri'] = item["volumeInfo"]["imageLinks"]["thumbnail"] if "imageLinks" in item["volumeInfo"] else ""
         output.append(result)
     return output
 
