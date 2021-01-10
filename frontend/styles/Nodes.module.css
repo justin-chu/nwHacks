@@ -1,0 +1,8 @@
+.graph {
+  width: calc(100% - 400px);
+  margin-top: 50px;
+  /* background-color: red; */
+  height: calc(100% - 50px);
+  position: absolute;
+  background-color: #ededed;
+}

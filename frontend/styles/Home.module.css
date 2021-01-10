@@ -14,6 +14,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-top: -10vh;
 }
 
 .footer {
@@ -68,11 +69,11 @@
 }
 
 .search_bar {
-  font-size: 27px;
+  font-size: 24px;
   text-align: center;
   color: black;
   transition: 0.5s;
-  padding: 10px;
+  padding: 5px 60px;
   border: 1px #252a2b solid;
   border-radius: 12px;
 }

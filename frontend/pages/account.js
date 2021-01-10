@@ -2,8 +2,6 @@ import { useState } from "react";
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import { useRouter } from "next/router";
-// import Graph from "react-graph-network";
-// import Node from "../components/Node";
 
 export default function Home() {
   const [search, setSearch] = useState("");
@@ -45,16 +43,6 @@ export default function Home() {
       <footer className={styles.footer}>
         Developed by Justin Chu, Mark Chen, Sam Prokopchuk, Connor Ibbotson
       </footer>
-
-      {/* <Graph
-        nodeDistance={150}
-        enableDrag={true}
-        pullIn={true}
-        data={info}
-        // zoomDepth={0.5}
-        id="graph"
-        NodeComponent={Node}
-      /> */}
     </div>
   );
 }

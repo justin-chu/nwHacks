@@ -1,0 +1,19 @@
+.circle {
+  cursor: pointer;
+  transition: opacity 0.5s;
+  display: block;
+  position: absolute;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  transform: scale(1);
+  transition: transform 0.5s;
+}
+
+.circle:hover {
+  opacity: 0.6;
+  transform: scale(2.5);
+  box-shadow: 5px 10px black;
+}
