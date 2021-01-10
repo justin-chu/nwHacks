@@ -4,9 +4,12 @@ import Navbar from "../../components/Navbar";
 import Nodes from "../../components/Nodes";
 // import Panel from "../../components/Panel";
 import NewPanel from "../../components/NewPanel";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PureModal from "react-pure-modal";
 import "react-pure-modal/dist/react-pure-modal.min.css";
+import { useRouter } from "next/router";
+import NextLink from "next/link";
+import axios from "axios";
 
 const Search = () => {
   const sample = {
@@ -199,10 +202,22 @@ const Search = () => {
     ],
   };
 
+  const router = useRouter();
+
   const [loading, setLoading] = useState(false);
-  // const [loading, setLoading] = useState(false);
+  const [percent, setPercent] = useState(30);
   const [path, setPath] = useState([]);
   const [modal, setModal] = useState(false);
+  const [data, setData] = useState({});
+
+  // useEffect(async () => {
+  //   // const result = await axios(
+  //   //   'https://hn.algolia.com/api/v1/search?query=redux',
+  //   // );
+
+  //   // setData(result.data);
+  //   setData(sample);
+  // });
 
   const handleChange = (p) => {
     path.push(p);
@@ -216,36 +231,40 @@ const Search = () => {
       </Head>
       <Navbar path={path} />
       <div className={styles.body}>
-        <Nodes onChange={handleChange} loading={loading} data={sample} />
+        <Nodes
+          onChange={handleChange}
+          loading={loading}
+          percent={percent}
+          data={sample}
+        />
         {/* <Panel data={sample} /> */}
         <NewPanel loading={loading} data={sample} />
       </div>
-      {/* <PureModal
+      <PureModal
         className={styles.modal}
         isOpen={modal}
         replace
         onClose={() => {
+          modal && router.push("/");
           setModal(false);
           return true;
         }}
       >
-        <svg
-          className={styles.searchbarIcon}
-          height="21"
-          width="21"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="grey"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-          />
-        </svg>
-      </PureModal> */}
+        <>
+          <div className={styles.error}>
+            <h1 className={styles.header}>
+              Sorry, we couldn't find anything for {router.query.query}
+            </h1>
+            <p style={{ width: 500 }}>
+              Try entering similar search queries or making your search query
+              more specific.
+            </p>
+            <NextLink href="/">
+              <div className={styles.button}>Search Again</div>
+            </NextLink>
+          </div>
+        </>
+      </PureModal>
     </div>
   );
 };

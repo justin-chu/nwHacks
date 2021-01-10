@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import styles from "../styles/Node.module.css";
+import cookie from "react-cookies";
 
 const Node = ({ node }) => {
   const router = useRouter();
@@ -28,36 +29,18 @@ const Node = ({ node }) => {
     );
   };
 
-  // const Title = (props) => {
-  //   let copy = props.str;
-  //   var result = [];
-  //   while (copy.length > 0) {
-  //     result.push(copy.substring(0, 20));
-  //     console.log(result);
-  //     copy = copy.substring(20);
-  //   }
-  //   return (
-  //     <>
-  //       <tspan x="50%" dy="-1em">
-  //         {result[0]}
-  //       </tspan>
-  //       <tspan x="50%" dy="1.2em">
-  //         {result[1] ? result[1] : ""}
-  //       </tspan>
-  //       <tspan x="50%" dy="1.2em">
-  //         {result[2] ? result[2] : ""}
-  //       </tspan>
-  //       <tspan x="50%" dy="1.2em">
-  //         {result[3] ? result[3] : ""}
-  //       </tspan>
-  //     </>
-  //   );
-  // };
-
-  // console.log(node.imgurl);
   return (
     <svg
-      onClick={() => router.push(`/search/${node.id}`)}
+      onClick={() => {
+        let currPath = cookie.load("path");
+        if (currPath) {
+          currPath.push(router.query.query);
+          cookie.save("path", currPath);
+        } else {
+          cookie.save("path", [router.query.query]);
+        }
+        router.push(`/search/${node.id}`);
+      }}
       className={styles.circle}
       height="300"
       width="300"
