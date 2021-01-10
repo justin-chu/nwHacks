@@ -6,7 +6,7 @@ import json
 from bs4 import BeautifulSoup
 from urllib.request import urlopen
 from urllib.parse import urljoin
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Optional
 
 
 def external_link_texts(matches: bs4.element.ResultSet) -> List[str]:
@@ -33,7 +33,7 @@ def wiki2dict(url: str) -> Dict[str, str]:
     return res
 
 
-def get_wiki_url(search_term: str) -> str:
+def get_wiki_url(search_term: str) -> Optional[str]:
     S = requests.Session()
 
     URL = 'https://en.wikipedia.org/w/api.php?format=json&action=query&prop=pageimages|info|extracts&exintro&explaintext&redirects=1&pithumbsize=1000&inprop=url&titles=' + search_term
@@ -52,7 +52,7 @@ def get_utube_links(search_term: str, key) -> str:
 
     R = S.get(url=URL)
     DATA = R.json()
-    return [f'https://www.youtube.com/watch?v={item["id"]["videoId"]}' for item in DATA["items"]]
+    return [f'https://www.youtube.com/watch?v={item["id"]["videoId"]}' for item in DATA["items"] if "videoId" in item["id"]]
 
 
 def get_books(search_term):
@@ -67,7 +67,7 @@ def get_books(search_term):
     for item in DATA["items"]:
         result = {}
         result['title'] = item["volumeInfo"]["title"]
-        result['authors'] = item["volumeInfo"]["authors"]
+        result['authors'] = item["volumeInfo"]["authors"] if "authors" in item["volumeInfo"] else []
         result['thumbnail_uri'] = item["volumeInfo"]["imageLinks"]["thumbnail"]
         output.append(result)
     return output
@@ -80,13 +80,13 @@ def get_thumbnail_url(search_term, key):
     r = requests.get(search_url)
     response = r.content.decode('utf-8')
     result = json.loads(response)
-    if len(result['items']):
+    if 'items' in result and result['items']:
         return result['items'][0]['link']
 
 
 def get_ctree(search_term: str, ctrees: dict) -> Tuple[str, dict]:
-    regexp = re.compile(search_term, flags=re.IGNORECASE)
-    cmatch = next((k for k in ctrees if regexp.search(k)), None)
+    regexp = re.compile(f' {search_term}', flags=re.IGNORECASE)
+    cmatch = min((k for k in ctrees if regexp.search(k)), key=len, default=None)
     if cmatch is None:
         return '', {}
     else:
@@ -99,8 +99,8 @@ def get_response_dict(search_term: str, ctrees: dict, ytb_key: str, gthumb_key: 
     d['books'] = get_books(search_term)
     d['ytb_links'] = get_utube_links(search_term, ytb_key)
     d['imgurl'] = get_thumbnail_url(search_term, gthumb_key)
-    d['steps'] = get_ctree(search_term, ctrees)
-
+    k, v = get_ctree(search_term, ctrees)
+    d['steps'] = {k: v} if k else {}
     temp = []
     while d['related']:
         rel = d['related'].pop()
