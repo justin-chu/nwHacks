@@ -1,0 +1,31 @@
+CSCA08H3 Introduction to Computer Programming
+CSCA20H3 Computer Science for the Sciences
+CSCA48H3 Introduction to Computer Science
+CSCA67H3 Discrete Mathematics for Computer Scientists
+CSCB07H3 Software Design
+CSCB09H3 Software Tools and Systems Programming
+CSCB20H3 Introduction to Databases and Web Applications
+CSCB29H3 Concepts in Elementary Computer Science
+CSCB36H3 Introduction to the Theory of Computation
+CSCB58H3 Computer Organization
+CSCB63H3 Design and Analysis of Data Structures
+CSCC01H3 Introduction to Software Engineering
+CSCC09H3 Programming on the Web
+CSCC11H3 Introduction to Machine Learning and Data Mining
+CSCC24H3 Principles of Programming Languages
+CSCC37H3 Introduction to Numerical Algorithms for Computational Mathematics
+CSCC43H3 Introduction to Databases
+CSCC63H3 Computability and Computational Complexity
+CSCC69H3 Operating Systems
+CSCC73H3 Algorithm Design and Analysis
+CSCC85H3 Introduction to Embedded Systems
+CSCD01H3 Engineering Large Software Systems
+CSCD03H3 Social Impact of Information Technology
+CSCD18H3 Computer Graphics
+CSCD27H3 Computer and Network Security
+CSCD37H3 Analysis of Numerical Algorithms for Computational Mathematics
+CSCD43H3 Database System Technology
+CSCD58H3 Computer Networks
+CSCD71H3 Topics in Computer Science
+CSCD72H3 Topics in the Theory of Computing
+CSCD84H3 Artificial Intelligence
