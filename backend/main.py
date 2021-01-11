@@ -2,8 +2,10 @@ import json
 
 from scrape import get_response_dict
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 with open('.keys', 'r') as f:
     keyd = json.load(f)
