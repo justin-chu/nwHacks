@@ -1,4 +1,4 @@
-import { useState, useLayoutEffect, useEffect } from "react";
+import { useState, useLayoutEffect, useEffect, useCallback } from "react";
 import styles from "../styles/Navbar.module.css";
 import PureModal from "react-pure-modal";
 import "react-pure-modal/dist/react-pure-modal.min.css";
@@ -6,16 +6,47 @@ import NextLink from "next/link";
 import { useRouter } from "next/router";
 import cookie from "react-cookies";
 
-export default function Navbar(props) {
-  const path = ["Machine Learning", "Artificial Intelligence", "Python"];
+export default function Navbar() {
   const [modal, setModal] = useState(0);
   const [search, setSearch] = useState("");
+  const [pathname, setPathname] = useState("");
+  const [savedIndex, setSavedIndex] = useState(-1);
+  const [temp, setTemp] = useState(0);
+
   const router = useRouter();
+
+  const savePath = () => {
+    const path = cookie.load("path");
+    cookie.save("saved:" + pathname, path ? path : []);
+    setModal(false);
+  };
+
+  const paths = cookie.loadAll();
+  const savedPaths = [];
+  for (let i = 0; i < Object.keys(paths).length; i++) {
+    if (Object.keys(paths)[i].substr(0, 6) === "saved:") {
+      savedPaths.push(Object.keys(paths)[i]);
+    }
+  }
+
+  const loadSaved = () => {
+    if (savedIndex !== -1) {
+      cookie.save("path", paths[`${savedPaths[savedIndex]}`]);
+    }
+    setModal(false);
+  };
+
+  const deleteSaved = () => {
+    if (savedIndex !== -1) {
+      cookie.remove(savedPaths[savedIndex], { path: "/" });
+    }
+    setModal(false);
+  };
 
   const handleKeyUp = (event) => {
     if (event.key === "Enter") {
+      router.push({ pathname: `/search/${search}`, query: { query: search } });
       setModal(false);
-      router.push(`/search/${search}`);
     }
   };
 
@@ -25,26 +56,21 @@ export default function Navbar(props) {
   }
 
   const history = (key) => {
-    console.log("here");
     for (let i = 0; i < currPath.length; i++) {
-      console.log(i);
       if (currPath[i] === key) {
         currPath = currPath.slice(0, i);
         cookie.save("path", currPath);
-        console.log(currPath);
         return;
       }
     }
   };
 
-  useEffect(() => {
-    // returned function will be called on component unmount
-    const removeCookie = () => {
-      cookie.remove("path");
-    };
-    return () => {
-      removeCookie();
-    };
+  const [state, setState] = useState({ count: 0, count2: 100 });
+
+  const setCount = useCallback(() => {
+    setState(({ count }) => ({ count: count + 1 }));
+    setState(({ count2 }) => ({ count2: count + 1 }));
+    setState(({ count }) => ({ count2: count + 1 }));
   }, []);
 
   return (
@@ -65,6 +91,7 @@ export default function Navbar(props) {
               <p key={p}>
                 <span className={styles.pathName}>
                   <NextLink
+                    onClick={() => setCount()}
                     href="/search/[query]"
                     as={`/search/${p}`}
                     onClick={() => history(p)}
@@ -149,6 +176,7 @@ export default function Navbar(props) {
         replace
         onClose={() => {
           setModal(0);
+          setSavedIndex(-1);
           return true;
         }}
       >
@@ -180,14 +208,58 @@ export default function Navbar(props) {
           </div>
         )}
         {modal === 2 && (
-          <>
-            <div>asdasd</div>
-          </>
+          <div className={styles.modal2}>
+            <h1 className={styles.header}>Save current path?</h1>
+            <input
+              onChange={(e) => setPathname(e.target.value)}
+              className={styles.saveInput}
+              type="text"
+              placeholder="Give the path a name!"
+            />
+            <div onClick={() => savePath()} className={styles.button}>
+              Save
+            </div>
+          </div>
         )}
         {modal === 3 && (
-          <>
-            <div>asdasd</div>
-          </>
+          <div className={styles.modal3}>
+            <h1 className={styles.header}>Saved paths:</h1>
+            <div className={styles.list}>
+              {/* {savedPaths.map((p, index) => {
+                console.log(p, index);
+              })} */}
+              {savedPaths.map((p, index) => {
+                return (
+                  <div
+                    key={index}
+                    className={styles.item}
+                    style={
+                      index === savedIndex
+                        ? {
+                            border: "1px solid rgba(0, 118, 255, 0.9)",
+                            backgroundColor: "rgba(0, 118, 255, 0.9)",
+                            color: "white",
+                          }
+                        : {}
+                    }
+                    onClick={() => {
+                      setSavedIndex(index);
+                    }}
+                  >
+                    {p.slice(6)}
+                  </div>
+                );
+              })}
+            </div>
+            <div className={styles.buttons}>
+              <div onClick={() => deleteSaved()} className={styles.remove}>
+                Delete
+              </div>
+              <div onClick={() => loadSaved()} className={styles.button}>
+                Open
+              </div>
+            </div>
+          </div>
         )}
       </PureModal>
     </>

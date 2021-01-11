@@ -1,5 +1,6 @@
 {
   "name": "frontend",
+  "proxy": "https://nwhacks-301300.uc.r.appspot.com",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -12,10 +13,13 @@
     "axios": "^0.21.1",
     "next": "10.0.5",
     "react": "^16.13.1",
+    "react-bootstrap": "^1.4.3",
     "react-cookies": "^0.1.1",
     "react-dom": "17.0.1",
     "react-graph-network": "^1.0.5",
     "react-pure-modal": "^2.0.14",
-    "react-shimmer-effect": "^1.0.9"
+    "react-shimmer-effect": "^1.0.9",
+    "react-text-loop": "^2.3.0",
+    "semantic-ui-react": "^2.0.1"
   }
 }
