@@ -51,7 +51,7 @@ export default function Home() {
       </main>
 
       <footer className={styles.footer}>
-        Developed by Justin Chu, Mark Chen, Connor Ibbotson
+        Developed by Sam Prokopchuk, Justin Chu, Mark Chen, Connor Ibbotson
       </footer>
     </div>
   );
