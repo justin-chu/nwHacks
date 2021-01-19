@@ -1,7 +1,5 @@
 # Pathfinder
 
-**1st Place Winner of nwHacks 2021**
-
 https://edupathfinder.tech/
 
 ## Inspiration
